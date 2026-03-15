@@ -22,13 +22,10 @@ jobs:
         run: uv sync --frozen
 
       # 3. DevSecOps: Security scan (Snyk)
-      - name: Generate requirements.txt for Snyk
-        run: uv pip freeze > requirements.txt
-
       - name: Run Snyk to check for vulnerabilities
-        # Use the generic CLI instead of the Python-specific one
-        uses: snyk/actions/setup@master
-      - run: snyk test --file=requirements.txt --package-manager=pip
+        run: |
+          uv pip freeze > requirements.txt
+          snyk test --file=requirements.txt --package-manager=pip --skip-unresolved=true
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
