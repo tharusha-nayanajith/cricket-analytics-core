@@ -28,7 +28,8 @@ jobs:
 
       # 2. Export dependencies to a format Snyk understands
       - name: Generate requirements.txt
-        run: uv pip freeze > requirements.txt
+        # uv export reads the uv.lock file directly, ensuring it's never empty
+        run: uv export --format requirements-txt > requirements.txt
 
       # 3. Run the static scan
       - name: Run Snyk to check for vulnerabilities
