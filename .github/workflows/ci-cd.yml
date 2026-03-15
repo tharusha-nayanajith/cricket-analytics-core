@@ -22,10 +22,17 @@ jobs:
         run: uv sync --frozen
 
       # 3. DevSecOps: Security scan (Snyk)
+      # 1. Install Snyk globally on the runner using npm
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+
+      # 2. Export dependencies to a format Snyk understands
+      - name: Generate requirements.txt
+        run: uv pip freeze > requirements.txt
+
+      # 3. Run the static scan
       - name: Run Snyk to check for vulnerabilities
-        run: |
-          uv pip freeze > requirements.txt
-          snyk test --file=requirements.txt --package-manager=pip --skip-unresolved=true
+        run: snyk test --file=requirements.txt --package-manager=pip --skip-unresolved=true
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
