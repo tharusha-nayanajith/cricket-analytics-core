@@ -26,12 +26,12 @@ jobs:
         run: uv pip freeze > requirements.txt
 
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/python@master
+        # Use the generic CLI instead of the Python-specific one
+        uses: snyk/actions/setup@master
+      - run: snyk test --file=requirements.txt --package-manager=pip
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --file=requirements.txt
           
       # 4. Build and Push Docker Image
       - name: Login to Docker Hub
