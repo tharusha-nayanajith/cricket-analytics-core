@@ -22,9 +22,6 @@ jobs:
         run: uv sync --frozen
 
       # 3. DevSecOps: Security scan (Snyk)
-      - name: Install Snyk CLI
-        uses: snyk/actions/setup@master
-
       - name: Run Snyk to check for vulnerabilities
         run: |
           uv pip freeze > requirements.txt
