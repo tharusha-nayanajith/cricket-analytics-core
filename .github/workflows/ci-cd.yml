@@ -22,8 +22,8 @@ jobs:
         run: uv sync --frozen
 
       # 3. DevSecOps: Security scan (Snyk)
-      - name: Generate requirements.txt
-        run: uv export --format requirements-txt > requirements.txt
+      - name: Generate requirements.txt for Snyk
+        run: uv pip freeze > requirements.txt
 
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/python@master
@@ -31,7 +31,6 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          command: test
           args: --file=requirements.txt
           
       # 4. Build and Push Docker Image
